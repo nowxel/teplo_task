@@ -34,6 +34,19 @@ class Overview extends StatelessWidget {
           key: _fbKey,
           child: Column(
             children: <Widget>[
+              FormBuilderFilterChip(
+                // name: 'filter_chip',
+                decoration: InputDecoration(
+                  labelText: 'Select many options',
+                ),
+                options: [
+                  FormBuilderFieldOption(
+                      value: 'Man', child: Text('Man')),
+                  FormBuilderFieldOption(
+                      value: 'Woman', child: Text('Woman')),
+
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
