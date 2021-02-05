@@ -1,98 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-// import 'package:intl/intl.dart';
-
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Overview(),
+        home: HomeScreen()
     );
   }
 }
 
-class Overview extends StatefulWidget {
-
-  Overview({Key key}) : super (key: key);
-
+class HomeScreen extends StatefulWidget {
   @override
-  _OverviewState createState() => _OverviewState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _OverviewState extends State<Overview> {
-  int selectedRadio;
-  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+class _HomeScreenState extends State<HomeScreen> {
 
-  @override
-  void initState() {
-    super.initState();
-    selectedRadio = 0;
-  }
+  final _formKey = GlobalKey<FormState>();
 
-  setSelectedRadio(int val) {
-    setState(() {
-      selectedRadio = val;
-    });
-  }
+  String _name;
+  int _age;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Flutter FormBuilder'),),
-      body: FormBuilder(
-          key: _fbKey,
-          child: Column(
-            children: <Widget>[
-              ButtonBar(
-                alignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Radio(
-                    value: 1,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.green,
-                    onChanged: (val){
-                      print("Radio $val");
-                      setSelectedRadio(val);
-                    },
-                  ),
-                  Radio(
-                    value: 2,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.green,
-                    onChanged: (val){
-                      print("Radio $val");
-                      setSelectedRadio(val);
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
+      body: Center(
+        child: Form(
+          key: this._formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text('Please fill in your name and age'),
+                TextFormField(
+                  autovalidate: false,
+                  onSaved: (value) => this._name = value,
+                  validator: (value) {
+                    if (value.length < 3) {
+                      return
+                        'a minimum of 3 characters is required';
+                    }
+                  },
+                ),
+                // Counter(),
                 RaisedButton(
-                    child: Text('Submit'),
-                    onPressed: () {
-                      if (!_fbKey.currentState.validate()) {
-                        return;
-                      }
-                      _fbKey.currentState.save();
-
-                      print(_fbKey);
-                    })
-              ],)
-            ],
-          )),
+                  child: Text('Submit'),
+                  onPressed: () {
+                    if (this._formKey.currentState.validate()) {
+                      setState(() {
+                        this._formKey.currentState.save();
+                      });
+                    }
+                  },
+                ),
+                SizedBox(height: 50.0),
+                Text(
+                    '${this._name} is ${this._age} years old'
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
-
-
