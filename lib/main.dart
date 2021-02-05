@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,11 +20,29 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Overview extends StatelessWidget {
+class Overview extends StatefulWidget {
+
   Overview({Key key}) : super (key: key);
 
+  @override
+  _OverviewState createState() => _OverviewState();
+}
+
+class _OverviewState extends State<Overview> {
+  int selectedRadio;
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
+  @override
+  void initState() {
+    super.initState();
+    selectedRadio = 0;
+  }
+
+  setSelectedRadio(int val) {
+    setState(() {
+      selectedRadio = val;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +52,27 @@ class Overview extends StatelessWidget {
           key: _fbKey,
           child: Column(
             children: <Widget>[
-              FormBuilderFilterChip(
-                // name: 'filter_chip',
-                decoration: InputDecoration(
-                  labelText: 'Select many options',
-                ),
-                options: [
-                  FormBuilderFieldOption(
-                      value: 'Man', child: Text('Man')),
-                  FormBuilderFieldOption(
-                      value: 'Woman', child: Text('Woman')),
-
+              ButtonBar(
+                alignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Radio(
+                    value: 1,
+                    groupValue: selectedRadio,
+                    activeColor: Colors.green,
+                    onChanged: (val){
+                      print("Radio $val");
+                      setSelectedRadio(val);
+                    },
+                  ),
+                  Radio(
+                    value: 2,
+                    groupValue: selectedRadio,
+                    activeColor: Colors.green,
+                    onChanged: (val){
+                      print("Radio $val");
+                      setSelectedRadio(val);
+                    },
+                  ),
                 ],
               ),
               Row(
@@ -53,7 +81,12 @@ class Overview extends StatelessWidget {
                 RaisedButton(
                     child: Text('Submit'),
                     onPressed: () {
-                      _fbKey.currentState.reset();
+                      if (!_fbKey.currentState.validate()) {
+                        return;
+                      }
+                      _fbKey.currentState.save();
+
+                      print(_fbKey);
                     })
               ],)
             ],
