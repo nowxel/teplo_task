@@ -1,12 +1,12 @@
+import 'package:teplo_task/widgets/custom_widget.dart';
 import 'package:flutter/material.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: HomeScreen()
-    );
+    return MaterialApp(home: HomeScreen());
   }
 }
 
@@ -16,11 +16,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final _formKey = GlobalKey<FormState>();
+  int _sex;
 
-  String _name;
-  int _age;
+  List<SexModel> _group = [
+    SexModel(
+      name: "Male",
+      index: 1,
+    ),
+    SexModel(
+      name: "Female",
+      index: 2,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -33,32 +41,27 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text('Please fill in your name and age'),
-                TextFormField(
-                  autovalidate: false,
-                  onSaved: (value) => this._name = value,
+                CustomWidget(
+                  data: _group,
+                  onSaved: (value) => _sex = value,
                   validator: (value) {
-                    if (value.length < 3) {
-                      return
-                        'a minimum of 3 characters is required';
+                    if (value == null) {
+                      return 'Set your sex';
                     }
+                    return null;
                   },
                 ),
-                // Counter(),
                 RaisedButton(
                   child: Text('Submit'),
                   onPressed: () {
                     if (this._formKey.currentState.validate()) {
                       setState(() {
                         this._formKey.currentState.save();
+                        print(_sex);
                       });
                     }
                   },
                 ),
-                SizedBox(height: 50.0),
-                Text(
-                    '${this._name} is ${this._age} years old'
-                )
               ],
             ),
           ),
